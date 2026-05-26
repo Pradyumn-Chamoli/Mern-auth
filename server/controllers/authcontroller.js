@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
+import transporter from "../config/nodemailer.js";
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -32,7 +33,18 @@ export const register = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.jsom({success:true});
+    //Sending welcome email
+    const mailOptions ={
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject :'Welcome to MERN Auth ',
+      text: `Welcome to MERN Auth, your account has been successfully created with email id :${email}`
+
+    }
+
+    await transporter.sendMail(mailOptions);
+
+    return res.json({success:true});
 
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -56,7 +68,7 @@ export const login = async (req, res) => {
       return res.json({ success: false, message: "Invalid Email" });
     }
 
-    const isMatch = await bcrypt.compare(password, user, password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return res.json({ success: false, message: "Invalid password" });
@@ -73,7 +85,7 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.jsom({success:true});
+    return res.json({success:true});
 
   } catch (error) {
     res.json({ success: false, message: error.message });
