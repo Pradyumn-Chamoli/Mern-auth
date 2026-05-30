@@ -9,7 +9,7 @@ const Header = () => {
       <img src={assets.header_img} alt="" 
       className='w-36 h-36 rounded-full mb-6'/>
 
-      <h1 className='flex items-centre gap-2 text-xl sm:text-3xl font-medium mb-2'>
+      <h1 className='flex items-center gap-2 text-xl sm:text-3xl font-medium mb-2'>
         Hey Developer <img className='w-8 aspect-square'
        src={assets.hand_wave} alt="" />
        </h1>
